@@ -1,0 +1,38 @@
+
+== 1. A Harlow lawyer asks the shared legal assistant ==================
+Q: What is the negotiation strategy for the Northwind merger?
+
+Retrieval ranks first, checks permissions later:
+  K-7 (kestrel) PRIVILEGED. Kestrel strategy for the Northwind me...
+  H-2 (harlow ) Harlow notes: Northwind merger, client wants a fa...
+
+Retrieval authorises inside the query (tenant=harlow):
+  H-2 (harlow ) Harlow notes: Northwind merger, client wants a fa...
+
+Once K-7 is in the prompt, no filter on the answer can take it back.
+
+== 2. 'Where is my parcel?' sent to an external model provider =========
+full record  12 fields, 8 sensitive
+             card_number, credit_score, date_of_birth, email
+             phone, ship_to, ssn, support_notes
+minimised     3 fields, 0 sensitive
+minimised payload: {'order_id': 'ORD-1042', 'status': 'in transit', 'eta': 'Thursday'}
+
+== 3. The answer is clean. Is the trace? ===============================
+sensitive values in the answer:     0
+sensitive values in the full trace: 5
+trace after scrubbing, before it reaches the APM tool:
+  reasoning: User is Alice, phone [PHONE], card ends 1111; order in ...
+  retrieved: ['Card on file [CARD]', 'SSN [SSN] verified 2026-01-04']
+note: the name 'Alice' survives. Patterns don't find names.
+
+== 4. The same leak, three spellings, one regex output filter ==========
+plain   caught 2  ->  Contact [EMAIL] or [PHONE].
+base64  caught 0  ->  Q29udGFjdCBqLmNoZW5Aa2VzdHJlbC1sYXcuZXhhbXBsZSBvciAoN...
+hex     caught 0  ->  436f6e74616374206a2e6368656e406b65737472656c2d6c61772...
+
+== Appendix: where the trace's sensitive values were ===================
+  prompt     2  EMAIL, PHONE
+  retrieved  2  CARD, SSN
+  reasoning  1  PHONE
+  answer     0  -

@@ -1,0 +1,23 @@
+
+== 1. Northbank searches a shared index (k=3) ==========================
+query: 'riverside credit union acquisition'
+                        filter after  filter inside
+----------------------  ------------  -------------
+index without Westfund  2             2            
+index with Westfund     0             2            
+With 'filter after', Northbank's own results vanish when another
+tenant holds closer matches. The count is the leak.
+
+== 2. A CV with hidden text, before and after ingest cleaning ==========
+raw text  ranking: doe 0.95, smith 0.71
+cleaned   ranking: smith 0.71
+          quarantined hidden text: senior python engineer machine learning seni...
+
+== 3. 'Only the embeddings leaked' =====================================
+vocabulary tried: 28 common words
+recovered 9 of 9 words: alice clinic diabetes diagnosed park patient referred to with
+false positives (hash collisions): ['card', 'mortgage']
+
+== 4. Documents deleted at the source, vectors still searchable ========
+source of truth now holds: ['N1', 'N2', 'W1']
+orphaned vectors still in the index: ['N3', 'W2', 'W3']

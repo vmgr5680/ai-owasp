@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-owasp"
+version = "0.1.0"
+description = "Companion code for the series on the OWASP Top 10 for LLM Applications (2026): one runnable, deterministic example per risk."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Govinda Reddy Vepanjeri" }]
+requires-python = ">=3.10"
+# Standard library only. No API keys, no network, no model downloads.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

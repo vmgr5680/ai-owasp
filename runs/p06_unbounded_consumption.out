@@ -1,0 +1,26 @@
+
+== 1. A stolen key: one request every 2 seconds for an hour ============
+normal user: ~10 requests/hour, 1,500 tokens in, 400 out ($0.11/hour)
+config               tok in  served  spent    notes                     
+-------------------  ------  ------  -------  --------------------------
+no limits            30,000  1800    $270.00  -                         
+alert at $25         30,000  1800    $270.00  alert fired at request 167
+hard cap $25         30,000  166     $24.90   hard cap x1634            
+all limits           30,000  0       $0.00    input too large x1800     
+all limits, adapted  7,900   300     $11.61   tokens/minute x1500       
+'adapted' = the attacker shrinks requests to slip under the input limit.
+
+== 2. One chat session, 100 turns, history re-sent every turn ==========
+turn  context tokens  cost/turn  with 12k window
+----  --------------  ---------  ---------------
+1     1,900           $0.010     $0.010         
+10    15,400          $0.051     $0.041         
+50    75,400          $0.231     $0.041         
+100   150,400         $0.456     $0.041         
+session total: $23.30 re-sending everything
+               $3.93 with a summarised 12k window
+x 1,000 concurrent sessions: $23,295 vs $3,932
+
+== 3. An agent tool that always says 'call me again' ===================
+  no breaker  200 steps  $ 50.76  hit the provider's step maximum
+  breaker       3 steps  $  0.05  loop: same state seen 3 times

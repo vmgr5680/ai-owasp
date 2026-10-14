@@ -1,0 +1,33 @@
+
+== 1. Scan before you load =============================================
+honest.pkl  imports outside allowlist: none
+trojan.pkl  imports outside allowlist: ['builtins.print']
+
+Loading trojan.pkl anyway, to show why the scan matters:
+!! code ran during pickle.load: this could have been anything
+
+Same weights as JSON (data only, nothing to execute):
+  {'layer1': [0.12, -0.4, 0.33], 'bias': [0.01]}
+
+== 2. The author deletes their account; an attacker re-registers it ====
+before:  by name -> loaded by name (sha256 7d729e05d416...)
+after:   by name -> loaded by name (sha256 c4c86084ba91...)
+after:   pinned  -> REFUSED: digest c4c86084ba91... != pinned 7d729e05d416...
+
+A validly signed artifact from a compromised build pipeline:
+  signature valid: True
+  behaviour checked: no. Signing proves who built it, not what it does.
+
+== 3. 'pip install' lines suggested by a coding assistant ==============
+  requests                   ok (on the registry for over 90 days)
+  fastapi                    ok (on the registry for over 90 days)
+  fastapi-oauth2-easyhelper  SUSPICIOUS: first published 13 days ago
+  flask-jwt-simplify-plus    NOT ON REGISTRY: hallucinated? do not install
+
+== 4. AI bill of materials for a commercial product ====================
+  machine-learning-model  support-7b-base       Apache-2.0
+  machine-learning-model  tone-lora-adapter     CC-BY-NC-4.0
+  data                    support-tickets-2025  proprietary
+  library                 fastapi               MIT
+
+licence findings: ['tone-lora-adapter: cc-by-nc-4.0 forbids commercial use']
